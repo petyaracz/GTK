@@ -1,0 +1,47 @@
+PassengerId
+Description: Unique identifier for each passenger.
+Type: Integer
+
+Survived
+Description: Indicates if the passenger survived.
+Type: Integer (0 = No, 1 = Yes)
+
+Pclass
+Description: Passenger's class.
+Type: Integer (1 = 1st class, 2 = 2nd class, 3 = 3rd class)
+
+Name
+Description: Full name of the passenger.
+Type: String
+
+Sex
+Description: Gender of the passenger.
+Type: String (e.g., male, female)
+
+Age
+Description: Age of the passenger.
+Type: Float (or Integer where applicable)
+
+SibSp
+Description: Number of siblings or spouses aboard the Titanic.
+Type: Integer
+
+Parch
+Description: Number of parents or children aboard the Titanic.
+Type: Integer
+
+Ticket
+Description: Ticket number.
+Type: String
+
+Fare
+Description: Ticket fare.
+Type: Float
+
+Cabin
+Description: Cabin number.
+Type: String (nullable, as many entries are missing)
+
+Embarked
+Description: Port of embarkation.
+Type: String (C = Cherbourg, Q = Queenstown, S = Southampton)
