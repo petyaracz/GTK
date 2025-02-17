@@ -5,18 +5,20 @@ import pandas as pd
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-
 from sklearn.neighbors import KNeighborsClassifier
 
 # load data
-d = pd.read_csv('dat/titanic.csv')
+d = pd.read_csv('https://raw.githubusercontent.com/petyaracz/GTK/refs/heads/main/dat/titanic.csv')
 
 # list columns
 d.columns
 
-# keep columns Survived, Pclass, Sex, Age, SibSp, Parch, Fare
+# one hot encode Pclass Sex
+d = pd.get_dummies(d, columns=['Sex'])
 
-d = d[['Survived', 'Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare']]
+# keep relevant cols
+
+d = d[['Survived', 'Pclass', 'Sex_female', 'Age', 'SibSp', 'Parch', 'Fare']]
 
 # drop missing values
 d = d.dropna()
