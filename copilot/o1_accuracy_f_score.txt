@@ -1,0 +1,23 @@
+
+
+In general, you should prefer accuracy when the classes in your dataset are relatively balanced (i.e., you have approximately the same number of positive and negative samples), and when each type of misclassification carries a similar cost. On the other hand, you should turn to the F1 score (often referred to as the F score, typically the harmonic mean of precision and recall) when you need to account for class imbalance or difference in misclassification costs (i.e., a false positive might be much worse or much less severe than a false negative).
+
+Here’s more detail:
+
+1. Accuracy is the fraction of correct predictions over total predictions:
+   • Good for: 
+     – Balanced datasets where both classes are well represented.
+     – Situations where you care equally about correct predictions across both classes.
+   • Not so good for:
+     – Highly imbalanced datasets, where a simple majority-class predictor might achieve high accuracy by ignoring the minority class.
+
+2. F1 Score is the harmonic mean of precision (the fraction of predicted positives that are truly positive) and recall (the fraction of actual positives that are correctly identified):
+   • Good for:
+     – Imbalanced datasets, since precision and recall both explicitly focus on the positive (often minority) class.
+     – Use cases where you need to balance the costs of false positives and false negatives, but you don’t have a strong reason to weight one more heavily than the other.
+   • Not so good for:
+     – Cases where you might need to account for the true negatives in a more nuanced way (for example, if a false positive is very costly, you might care more about specificity or precision).
+
+In practice:
+• If you have a balanced dataset with similar costs for false positives and false negatives, accuracy typically gives a straightforward measure of performance.
+• If you have an imbalanced dataset or different costs for each type of misclassification, metrics like F1 score (along with precision, recall, or other specialized metrics) are usually more informative.
