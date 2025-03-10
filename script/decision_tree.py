@@ -33,18 +33,15 @@ d = d.dropna()
 # randomise order of rows
 d = d.sample(frac=1)
 
-# training and eval and test split: 80% training, 20% test
-train, test = train_test_split(d, test_size=0.2)
-
 # set up hyperparameter grid
-criteria = ['gini', 'entropy']
-splitter = ['best', 'random']
-max_depth = np.arange(1, 10)
-min_samples_split = np.arange(2, 10)
-min_samples_leaf = np.arange(1, 10)
-max_features = ['auto', 'sqrt', 'log2']
-max_leaf_nodes = np.arange(2, 10)
-min_impurity_decrease = np.arange(0, 0.1, 0.01)
+criteria = ['gini', 'entropy']  # Criterion for measuring the quality of a split
+splitter = ['best', 'random']  # Strategy used to choose the split at each node
+max_depth = np.arange(1, 10)  # Maximum depth of the tree
+min_samples_split = np.arange(2, 10)  # Minimum number of samples required to split an internal node
+min_samples_leaf = np.arange(1, 10)  # Minimum number of samples required to be at a leaf node
+max_features = ['auto', 'sqrt', 'log2']  # Number of features to consider when looking for the best split
+max_leaf_nodes = np.arange(2, 10)  # Maximum number of leaf nodes
+min_impurity_decrease = np.arange(0, 0.1, 0.01)  # Threshold for early stopping in tree growth (split only if impurity is reduced by at least this amount)
 
 param_grid = {'criterion': criteria, 'splitter': splitter, 'max_depth': max_depth, 'min_samples_split': min_samples_split, 'min_samples_leaf': min_samples_leaf, 'max_features': max_features, 'max_leaf_nodes': max_leaf_nodes, 'min_impurity_decrease': min_impurity_decrease}
 
@@ -59,7 +56,7 @@ dt = DecisionTreeClassifier()
 # grid_search.fit(train[['Pclass', 'Age']], train['Survived'])
 random_search = RandomizedSearchCV(dt, param_grid, cv=5, n_iter=1000, random_state=42)
 
-random_search.fit(train[['Pclass', 'Sex_female', 'Age']], train['Survived'])
+random_search.fit(d[['Pclass', 'Sex_female', 'Age']], d['Survived'])
 
 # best hyperparameter
 random_search.best_params_
@@ -89,7 +86,3 @@ plot_tree(
     fontsize=8
 )
 plt.show()
-
-# best tree confusion matrix
-pred = random_search.predict(test[['Pclass', 'Sex_female', 'Age']])
-confusion_matrix(test['Survived'], pred)
