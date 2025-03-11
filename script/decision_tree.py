@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score
 # load decision tree classifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import RandomizedSearchCV
+# from sklearn.model_selection import RandomizedSearchCV
 from sklearn.tree import plot_tree
 import matplotlib.pyplot as plt
 
@@ -33,11 +33,11 @@ d = d.sample(frac=1)
 param_grid = {
 'criterion' : ['gini'], # Criterion for measuring the quality of a split, alt. is entropy
 'splitter' : ['best'],  # Strategy used to choose the split at each node, NA support
-'max_depth' : [1,3,5],  # Maximum depth of the tree
-'min_samples_split' : [1,5,20],  # Minimum number of samples required to split an internal node
-'min_samples_leaf' : [1,2,10],  # Minimum number of samples required to be at a leaf node
+'max_depth' : [1,2,3,5],  # Maximum depth of the tree
+'min_samples_split' : [1,5,20,50],  # Minimum number of samples required to split an internal node
+'min_samples_leaf' : [1,2,10,50],  # Minimum number of samples required to be at a leaf node
 # 'max_features' : ['auto', 'sqrt', 'log2'],  # Number of features to consider when looking for the best split
-'max_leaf_nodes' : [1,5,10],  # Maximum number of leaf nodes
+'max_leaf_nodes' : [1,3,5,10],  # Maximum number of leaf nodes
 'min_impurity_decrease' : [0,0.01,0.05,0.1]  # Threshold for early stopping in tree growth (split only if impurity is reduced by at least this amount)
 }
 
