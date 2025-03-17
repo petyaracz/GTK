@@ -10,8 +10,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.feature_selection import VarianceThreshold
-# import pipeline
-from sklearn.pipeline import Pipeline
 
 d = pd.read_csv(url)
 
@@ -53,29 +51,23 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # set up hyperparameter grid
 param_grid = {
-'criterion' : ['gini'],
-'splitter' : ['best'],
-'max_depth' : [1,2,5,10], 
-'min_samples_split' : [1,10,20,100],
-'min_samples_leaf' : [1,5,50,100],
-'max_features' : ['auto', 'sqrt', 'log2'],  # Number of features to consider when looking for the best split
-'max_leaf_nodes' : [1,3,5,10],
-'min_impurity_decrease' : [0,0.01,0.05,0.1]
+    'max_depth': [10, 20, 30, None],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 5, 10],
+    'max_features': [None, 'auto', 'sqrt', 'log2'],
+    'class_weight': [None, 'balanced'],
+    'max_leaf_nodes': [None, 10, 20, 30],
+    'min_impurity_decrease': [0.0, 0.1, 0.2]
 }
 
 # set up decision tree model
 dt = DecisionTreeClassifier()
 
 # set up grid search with training eval split
-grid_search = GridSearchCV(dt, param_grid, cv=3)
+grid_search = GridSearchCV(dt, param_grid, cv=3, verbose=1, n_jobs=-1)
 
 # fit grid search
-# measure duration of fit
-import time
-start = time.time()
 grid_search.fit(X_train, y_train)
-end = time.time()
-print(end - start)
 
 # training accuracy
 grid_search.best_score_
@@ -95,5 +87,19 @@ from sklearn.tree import plot_tree
 plot_tree(best_tree, feature_names=X.columns, filled=True)
 plt.show()
 
-# feature importance
+# feature importance with labels
+
+# get feature importances
 best_tree.feature_importances_
+
+# create a dataframe of features and importances
+fi = pd.DataFrame({
+    'feature': X.columns,
+    'importance': best_tree.feature_importances_
+})
+
+# sort features by importance
+fi = fi.sort_values('importance', ascending=False)
+
+# print feature importances
+print(fi)
