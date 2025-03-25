@@ -30,6 +30,15 @@ wine = fetch_ucirepo(id=109)
 # data (as pandas dataframes) 
 X = wine.data.features 
 y = wine.data.targets.values.ravel() # to flatten array
+ 
+# in wine, boxplot of class ~ all other columns, put in grid of 4x4
+# violin plot of class ~ all other columns
+plt.figure(figsize=(20, 20))
+for i in range(1, 14):
+    plt.subplot(4, 4, i)
+    # violin plot
+    sns.violinplot(x=y, y=X.iloc[:, i-1])
+plt.show()
   
 # heatmap of X
 plt.figure(figsize=(10, 10))
@@ -66,11 +75,11 @@ rf = RandomForestClassifier(n_estimators=100)
 
 # grid for RF
 param_grid_rf = {
-    'max_features': [None, 'sqrt', 'log2'],
     'max_depth' : [5, 50],
     'min_samples_split': [2, 10],
     'min_samples_leaf': [2, 10],
-    'max_samples': [0.33, 0.66, 1]  # Add this line to include max_samples
+    'max_samples': [0.33, 0.66, 1], # !
+    'max_features': [None, 'sqrt', 'log2'] # !
 }
 
 # grid search
