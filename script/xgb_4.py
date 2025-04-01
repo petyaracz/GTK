@@ -1,33 +1,18 @@
 
-from ucimlrepo import fetch_ucirepo 
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import accuracy_score, roc_auc_score, confusion_matrix, roc_curve
 from xgboost import XGBClassifier
 from sklearn.preprocessing import LabelEncoder
 
-from ucimlrepo import fetch_ucirepo 
-  
-from ucimlrepo import fetch_ucirepo 
-  
 # fetch dataset 
-early_stage_diabetes_risk_prediction = fetch_ucirepo(id=529) 
-  
-# data (as pandas dataframes) 
-X = early_stage_diabetes_risk_prediction.data.features 
-y = early_stage_diabetes_risk_prediction.data.targets 
-
-# dummy code X, drop first
-X = pd.get_dummies(X, drop_first=True)
-
-# encode y as 1 if Positive and 0 if negative
-label_encoder = LabelEncoder()
-# Unravel y if needed and encode it
-y = np.ravel(y)  # Ensure y is 1D
-y = label_encoder.fit_transform(y)
+X, y = fetch_openml("heart-disease", return_X_y=True, target_column='target', as_frame=True)
+# convert y to int
+y = y.astype('int')
   
 # split data
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
@@ -68,3 +53,12 @@ xgb_acc
 xgb_roc
 xgb_cm
 
+# plot roc curve
+fpr, tpr, thresholds = roc_curve(y_test, xgb_pred)
+plt.plot(fpr, tpr, label='XGBoost (area = {:.2f})'.format(xgb_roc))
+plt.plot([0, 1], [0, 1], 'k--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curve')
+plt.legend(loc='best')
+plt.show()
