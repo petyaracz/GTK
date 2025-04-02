@@ -7,7 +7,6 @@ from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import accuracy_score, roc_auc_score, confusion_matrix, roc_curve
 from xgboost import XGBClassifier
-from sklearn.preprocessing import LabelEncoder
 
 # fetch dataset 
 X, y = fetch_openml("heart-disease", return_X_y=True, target_column='target', as_frame=True)
@@ -39,6 +38,7 @@ grid_search = GridSearchCV(estimator=xgb,
 
 grid_search.fit(X_train, y_train)
 
+
 # best params
 grid_search.best_params_
 # pred
@@ -49,10 +49,15 @@ xgb_acc = accuracy_score(y_test, xgb_pred)
 xgb_roc = roc_auc_score(y_test, xgb_pred)
 # confusion matrix  
 xgb_cm = confusion_matrix(y_test, xgb_pred)
-xgb_acc
-xgb_roc
-xgb_cm
-
+# print results as "XGBoost: accuracy, roc_auc, confusion matrix"
+print("XGBoost: accuracy = {:.2f}, roc_auc = {:.2f}".format(xgb_acc, xgb_roc))
+# print confusion matrix with labels
+cm_df = pd.DataFrame(xgb_cm, index=['True Neg', 'True Pos'], columns=['Pred Neg', 'Pred Pos'])
+sns.heatmap(cm_df, annot=True, fmt='d', cmap='Blues')
+plt.title('Confusion Matrix')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.show()
 # plot roc curve
 fpr, tpr, thresholds = roc_curve(y_test, xgb_pred)
 plt.plot(fpr, tpr, label='XGBoost (area = {:.2f})'.format(xgb_roc))
